@@ -129,6 +129,19 @@ var View = {
             this.startNode.attr({ x: coord[0], y: coord[1] }).toFront();
         }
     },
+
+    setStartPosWithoutDeletePrev: function (gridX, gridY) {
+        var coord = this.toPageCoordinate(gridX, gridY);
+        var storeNode = this.paper.rect(
+            coord[0],
+            coord[1],
+            this.nodeSize,
+            this.nodeSize
+        ).attr(this.nodeStyle.normal)
+            .animate(this.nodeStyle.start, 1000).toFront();
+    },
+
+
     setEndPos: function(gridX, gridY) {
         var coord = this.toPageCoordinate(gridX, gridY);
         if (!this.endNode) {

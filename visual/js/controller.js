@@ -478,9 +478,26 @@ $.extend(Controller, {
         centerX = Math.ceil(availWidth / 2 / nodeSize);
         centerY = Math.floor(height / 2 / nodeSize);
 
-        this.setStartPos(centerX - 5, centerY);
-        this.setEndPos(centerX + 5, centerY);
+        //this.setStartPos(0, 20);
+        this.setEndPos(20, 0);
+
+        //set default blocks
+        for (width = 0; width < 22; width++) {
+            for (height = 0;  height < 36; height++) {
+                if ((width % 3 !== 0) && (height % 4 !== 0))
+                    this.setWalkableAt(height, width, false);
+            }
+        }
+
+        View.setStartPosWithoutDeletePrev(10, 20);
+        View.setStartPosWithoutDeletePrev(20, 10);
+        View.setStartPosWithoutDeletePrev(30, 20);
+        View.setStartPosWithoutDeletePrev(20, 30);
+
+
     },
+    
+
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
