@@ -44,17 +44,31 @@
     Panel.init();
     Controller.init();
 
-    View.setStartPosWithoutDeletePrev(10, 20);
-    View.setStartPosWithoutDeletePrev(20, 10);
-    View.setStartPosWithoutDeletePrev(30, 20);
-    View.setStartPosWithoutDeletePrev(20, 30);
+    $.extend(Controller,{
+      setStartPosWithoutDeletePrev: function (gridX, gridY) {
+        View.setStartPosWithoutDeletePrev(gridX, gridY);
+      },
+    });
+    var dotCounter = 0;
+(function addDot() {
+  setTimeout(function() {
+    if (dotCounter++ < 10) {
+      $('#dots').append('.');
+      addDot();
+    }
+  }, 3000);
+})();
+    Controller.setStartPosWithoutDeletePrev(10,10);
 });
+
+
  </script>
+
 
 
     <div id="draw_area">
       
-    </div>
+    </div>\
 
     <div id="instructions_panel" class="panel">
       <header>
@@ -242,20 +256,20 @@
           </div>
         </div>
 
-      </div>
-    </div> --><!-- #algorithm_panel -->
+      </div><!-- .accordion -->
+    </div><!-- #algorithm_panel -->
 
-    <!-- <div id="play_panel" class="panel right_panel">
+    <div id="play_panel" class="panel right_panel">
       <button id="button1" class="control_button">Start Search</button>
       <button id="button2" class="control_button">Pause Search</button>
       <button id="button3" class="control_button">Clear Walls</button>
-    </div> -->
+    </div>
 
     <div id="stats"></div>
 
     <footer>
       Project Hosted on <a href="http://github.com/qiao/PathFinding.js">Github</a>
-    </footer> 
+    </footer>
 
   </body>
 </html>
