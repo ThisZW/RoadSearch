@@ -504,6 +504,10 @@ $.extend(Controller, {
         }
     },
 
+    setStartPosWithoutDeletePrev: function (gridX, gridY) {
+        View.setStartPosWithoutDeletePrev(gridX, gridY);
+    },
+
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
