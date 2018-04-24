@@ -141,3 +141,8 @@ footer {
 .spinner {
     width: 2em;
 }
+
+
+  #instructions_panel,#algorithm_panel,#play_panel,#stats{
+    display:none;
+  }
