@@ -85,8 +85,8 @@ var Panel = {
             break;
 
         case 'bestfirst_header':
-            allowDiagonal = typeof $('#bestfirst_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+                allowDiagonal = false;//typeof $('#bestfirst_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             biDirectional = typeof $('#bestfirst_section ' +
                                      '.bi-directional:checked').val() !== 'undefined';
             dontCrossCorners = typeof $('#bestfirst_section ' +
