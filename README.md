@@ -1,3 +1,15 @@
+RoadSearch
+------------
+We use the basic compoents of this plugin (search algorithms) in order to 
+Generate Paths for our csc322 Delivery System project. All rights reserved by the origin author that states in the bottom.
+----------
+
+
+
+
+
+
+
 PathFinding.js
 ==============
 #### A comprehensive path-finding library in javascript. ####

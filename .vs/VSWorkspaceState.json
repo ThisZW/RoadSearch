@@ -1,10 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\benchmark",
     "\\src",
+    "\\src\\finders",
     "\\visual",
-    "\\visual\\js"
+    "\\visual\\js",
+    "\\visual\\lib"
   ],
-  "SelectedNode": "\\visual\\index.html",
+  "SelectedNode": "\\src\\PathFinding.js",
   "PreviewInSolutionExplorer": false
 }
