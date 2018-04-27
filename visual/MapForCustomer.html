@@ -67,6 +67,12 @@
     //Controller.setStartPosWithoutDeletePrev(10,10);
 });
 
+   //思路: 用ajax在后端把三个最近地址送到前端 通过extend打进controller class 然后跑这个function把三个startPos画出来当做stores?
+    function confirmAction(){
+      Controller.setStartPosWithoutDeletePrev(Controller.x1,Controller.y1);
+      Controller.setStartPosWithoutDeletePrev(Controller.x2,Controller.y2);
+      Controller.setStartPosWithoutDeletePrev(Controller.x3,Controller.y3); 
+    }
 
  </script>
 
@@ -75,7 +81,7 @@
     <div id="draw_area">
       
     </div>
-    <button name="confirm" id="confirm">Confirm your address</button>
+    <button name="confirm" id="confirm" onclick="confirmAction()">Confirm your address</button>
     <div id="instructions_panel" class="panel">
       <header>
         <h2 class="header_title">Instructions</h2>
@@ -238,7 +244,7 @@
           </div>
         </div>
 
-	<h3 id="orth_jump_point_header"><a href="#">Orthogonal Jump Point Search</a></h3>
+  <h3 id="orth_jump_point_header"><a href="#">Orthogonal Jump Point Search</a></h3>
         <div id="orth_jump_point_section" class="finder_section">
           <header class="option_header">
             <h3>Heuristic</h3>

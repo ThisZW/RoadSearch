@@ -29,7 +29,7 @@ var Controller = StateMachine.create({
         },
         {
             name: 'resume',
-            from: 'paused', 
+            from: 'paused',
             to:   'searching'
         },
         {
@@ -86,14 +86,13 @@ var Controller = StateMachine.create({
             name: 'rest',
             from: ['draggingStart', 'draggingEnd', 'drawingWall', 'erasingWall'],
             to  : 'ready'
-        },      
-
+        },
     ],
 });
 
 $.extend(Controller, {
-    gridSize: [29, 19], // number of nodes horizontally and vertically
-    operationsPerSecond: 1,
+    gridSize: [64, 36], // number of nodes horizontally and vertically
+    operationsPerSecond: 300,
 
     /**
      * Asynchronous transition from `none` state to `ready` state.
@@ -109,8 +108,7 @@ $.extend(Controller, {
             numRows: numRows
         });
         View.generateGrid(function() {
-            //Controller.setDefaultStartEndPos();
-            Controller.setDefaultBlocks();
+            Controller.setDefaultStartEndPos();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
         });
@@ -122,8 +120,6 @@ $.extend(Controller, {
         return StateMachine.ASYNC;
         // => ready
     },
-
-
     ondrawWall: function(event, from, to, gridX, gridY) {
         this.setWalkableAt(gridX, gridY, false);
         // => drawingWall
@@ -156,8 +152,8 @@ $.extend(Controller, {
         // that all the animations are done by the time we clear the colors.
         // The same reason applies for the `onreset` event handler.
         setTimeout(function() {
-            Controller.clearOperations();
-            Controller.clearFootprints();
+           // Controller.clearOperations();
+           // Controller.clearFootprints();
             Controller.start();
         }, View.nodeColorizeEffect.duration * 1.2);
         // => restarting
@@ -226,7 +222,7 @@ $.extend(Controller, {
     onstarting: function(event, from, to) {
         console.log('=> starting');
         // Clears any existing search progress
-        this.clearFootprints();
+        //this.clearFootprints();
         this.setButtonStates({
             id: 2,
             enabled: true,
@@ -234,6 +230,7 @@ $.extend(Controller, {
         this.search();
         // => searching
     },
+
     onsearching: function() {
         console.log('=> searching');
         this.setButtonStates({
@@ -486,30 +483,28 @@ $.extend(Controller, {
         this.setEndPos(20, 0);
 
         //set default blocks
-        for (width = 0; width < 19; width++) {
-            for (height = 0;  height < 36; height++) {
+        for (width = 0; width < 18; width++) {
+            for (height = 0;  height < 32; height++) {
                 if ((width % 3 !== 0) && (height % 4 !== 0))
                     this.setWalkableAt(height, width, false);
             }
         }
 
+        View.setStartPosWithoutDeletePrev(1, 10);
+        View.setStartPosWithoutDeletePrev(6, 2);
+        View.setStartPosWithoutDeletePrev(11, 7);
+        //View.setStartPosWithoutDeletePrev(16, 3);
+        //write a function/cond to restrict user choose points that are not default node.
+        this.setStartPos(6, 2);
+
     },
     
-    setDefaultBlocks: function (){
-        for (width = 0; width < 19; width++) {
-            for (height = 0;  height < 28; height++) {
-                if ((width % 3 !== 0) && (height % 4 !== 0))
-                    this.setWalkableAt(height, width, false);
-            }
-        }
-    },
 
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
         View.setStartPos(gridX, gridY);
     },
-
     setEndPos: function(gridX, gridY) {
         this.endX = gridX;
         this.endY = gridY;
