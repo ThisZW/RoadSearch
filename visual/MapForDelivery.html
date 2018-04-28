@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -25,10 +25,36 @@
     <script type="text/javascript" src="./js/view.js"></script>
     <script type="text/javascript" src="./js/controller.js"></script>
     <script type="text/javascript" src="./js/panel.js"></script>
-    <script type="text/javascript" src="./js/main.js"></script>
+    <!-- <script type="text/javascript" src="./js/main.js"></script> -->
   </head>
   <body>
-    <div id="draw_area"></div>
+
+ <script type="text/javascript">
+   $(document).ready(function() {
+    if (!Raphael.svg) {
+        window.location = './notsupported.html';
+    }
+
+    // suppress select events
+    $(window).bind('selectstart', function(event) {
+        event.preventDefault();
+    });
+
+    // initialize visualization
+    Panel.init();
+    Controller.init();
+
+    View.setStartPosWithoutDeletePrev(10, 20);
+    View.setStartPosWithoutDeletePrev(20, 10);
+    View.setStartPosWithoutDeletePrev(30, 20);
+    View.setStartPosWithoutDeletePrev(20, 30);
+});
+ </script>
+
+
+    <div id="draw_area">
+      
+    </div>
 
     <div id="instructions_panel" class="panel">
       <header>
@@ -216,20 +242,20 @@
           </div>
         </div>
 
-      </div><!-- .accordion -->
-    </div><!-- #algorithm_panel -->
+      </div>
+    </div> --><!-- #algorithm_panel -->
 
-    <div id="play_panel" class="panel right_panel">
+    <!-- <div id="play_panel" class="panel right_panel">
       <button id="button1" class="control_button">Start Search</button>
       <button id="button2" class="control_button">Pause Search</button>
       <button id="button3" class="control_button">Clear Walls</button>
-    </div>
+    </div> -->
 
     <div id="stats"></div>
 
     <footer>
       Project Hosted on <a href="http://github.com/qiao/PathFinding.js">Github</a>
-    </footer>
+    </footer> 
 
   </body>
 </html>
