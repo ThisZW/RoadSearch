@@ -111,6 +111,7 @@ $.extend(Controller, {
             Controller.setDefaultStartEndPos();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
+            Controller.ongeneratingroutes();
         });
 
         this.$buttons = $('.control_button');
@@ -199,6 +200,20 @@ $.extend(Controller, {
     /**
      * The following functions are called on entering states.
      */
+
+    ongeneratingroutes: function () {
+        //Gor: for first and second search:
+        Controller.onsearch();
+        Controller.onfinish();
+        //select 2nd and 3rd algorithm: TODO - implement
+
+        //third search: search twice and clear path.
+        Controller.onsearch();
+        Controller.onfinish();
+        Controller.onfinish();
+        Controller.onclear();
+    },
+
 
     onready: function() {
         console.log('=> ready');
