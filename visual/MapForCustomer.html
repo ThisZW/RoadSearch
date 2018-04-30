@@ -29,7 +29,12 @@
   </head>
   <body>
 
- <script type="text/javascript">
+  <script type="text/javascript">
+        //by Zw, this can be the field that takes parameter from backend(address/axis)
+    var stores = {!! json_encode($data) !!};
+    var tempStores = [];
+    var check = false;
+    var storeSelection = [];
    $(document).ready(function() {
     if (!Raphael.svg) {
         window.location = './notsupported.html';
@@ -44,37 +49,70 @@
     Panel.init();
     Controller.init();
 
-    //by Zw, this can be the field that takes parameter from backend(address/axis)
-    $.extend(Controller,{
-      x1 : 10, y1 : 11,
-      x2 : 8 , y2 : 16,
-      x3 : 9 , y3 : 10
-    });
-
     $.extend(Controller,{
       //overwrite
       mousedown: function (event) {
-          var coord = View.toGridCoordinate(event.pageX, event.pageY),
-              gridX = coord[0],
-              gridY = coord[1],
-              grid  = this.grid;
+        //set offset to the draw area first, in order to make the event of x,y work
+        var posX = $('#draw_area').offset().left;
+        var posY = $('#draw_area').offset().top;
+        var coord = View.toGridCoordinate(event.pageX-posX, event.pageY-posY),
+          gridX = coord[0],
+          gridY = coord[1],
+          grid  = this.grid;
 
-          if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
-              this.setEndPos(gridX, gridY);
-          }
+          console.log(tempStores);
+
+        for ( i in tempStores){
+          if (tempStores[i].x_grid == gridX && tempStores[i].y_grid == gridY)
+            check = true;
+        }
+
+        if(check){
+          this.setSelectedNode(gridX,gridY);
+          storeSelection = [];
+          storeSelection.push(gridX, gridY);
+          check = false;
+        }
+        else if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
+          this.setEndPos(gridX, gridY);
+          findNearestStores(gridX,gridY);
+        }
+
       },
     });
     //Controller.setStartPosWithoutDeletePrev(10,10);
 });
 
-   //思路: 用ajax在后端把三个最近地址送到前端 通过extend打进controller class 然后跑这个function把三个startPos画出来当做stores?
-    function confirmAction(){
-      Controller.setStartPosWithoutDeletePrev(Controller.x1,Controller.y1);
-      Controller.setStartPosWithoutDeletePrev(Controller.x2,Controller.y2);
-      Controller.setStartPosWithoutDeletePrev(Controller.x3,Controller.y3); 
-    }
 
- </script>
+   //拉出所有store, 算路程，sort， 输出三个store , 输出的同时清除之前出现位置的其他store
+    function findNearestStores(x , y){
+        for (var i in stores){
+          if (i==3)
+            break;
+          else
+            Controller.flushCurrentGreenNodes(stores[i]);
+            tempStores = []; //this will clear current nearest stores before getting new ones.
+        }
+        for(var i in stores){
+          stores[i].distance = Math.sqrt( Math.pow((stores[i].x_grid - x), 2) + Math.pow((stores[i].y_grid - y),2));
+        }
+        stores.sort(function(a,b){ 
+            var x = a.distance < b.distance? -1:1; 
+            return x; 
+        });
+        for(var i in stores){
+          if (i==3)
+            break;
+          else
+            tempStores.push({x_grid : stores[i].x_grid, y_grid : stores[i].y_grid });
+            Controller.setStartPosWithoutDeletePrev(stores[i].x_grid, stores[i].y_grid);
+        }
+    }
+  
+    function clearStores(){
+
+    }
+</script>
 
 
 

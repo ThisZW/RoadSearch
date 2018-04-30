@@ -29,7 +29,7 @@ var Controller = StateMachine.create({
         },
         {
             name: 'resume',
-            from: 'paused',
+            from: 'paused', 
             to:   'searching'
         },
         {
@@ -86,13 +86,14 @@ var Controller = StateMachine.create({
             name: 'rest',
             from: ['draggingStart', 'draggingEnd', 'drawingWall', 'erasingWall'],
             to  : 'ready'
-        },
+        },      
+
     ],
 });
 
 $.extend(Controller, {
-    gridSize: [64, 36], // number of nodes horizontally and vertically
-    operationsPerSecond: 300,
+    gridSize: [29, 19], // number of nodes horizontally and vertically
+    operationsPerSecond: 1,
 
     /**
      * Asynchronous transition from `none` state to `ready` state.
@@ -108,9 +109,11 @@ $.extend(Controller, {
             numRows: numRows
         });
         View.generateGrid(function() {
-            Controller.setDefaultStartEndPos();
+            //Controller.setDefaultStartEndPos();
+            Controller.setDefaultBlocks();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
+            Controller.ongeneratingroutes();
         });
 
         this.$buttons = $('.control_button');
@@ -120,6 +123,8 @@ $.extend(Controller, {
         return StateMachine.ASYNC;
         // => ready
     },
+
+
     ondrawWall: function(event, from, to, gridX, gridY) {
         this.setWalkableAt(gridX, gridY, false);
         // => drawingWall
@@ -199,6 +204,20 @@ $.extend(Controller, {
     /**
      * The following functions are called on entering states.
      */
+
+    ongeneratingroutes: function () {
+        //Gor: for first and second search:
+        Controller.onsearch();
+        Controller.onfinish();
+        //select 2nd and 3rd algorithm: TODO - implement
+
+        //third search: search twice and clear path.
+        Controller.onsearch();
+        Controller.onfinish();
+        Controller.onfinish();
+        Controller.onclear();
+    },
+
 
     onready: function() {
         console.log('=> ready');
@@ -483,28 +502,58 @@ $.extend(Controller, {
         this.setEndPos(20, 0);
 
         //set default blocks
-        for (width = 0; width < 18; width++) {
-            for (height = 0;  height < 32; height++) {
+        for (width = 0; width < 19; width++) {
+            for (height = 0;  height < 36; height++) {
                 if ((width % 3 !== 0) && (height % 4 !== 0))
                     this.setWalkableAt(height, width, false);
             }
         }
 
+
+        //Gor: random generate busy conditions
+        for (var value = 0; value < 70; value++) {
+            width = Math.floor((Math.random() * 32) + 0);
+            height = Math.floor((Math.random() * 18) + 0);
+            if ((height % 3 == 0) && (width % 4 == 0))
+                View.setBusyPos(width, height);
+        }
+
+
         View.setStartPosWithoutDeletePrev(1, 10);
         View.setStartPosWithoutDeletePrev(6, 2);
         View.setStartPosWithoutDeletePrev(11, 7);
-        //View.setStartPosWithoutDeletePrev(16, 3);
+        //View.setBusyPos(9, 0);
+        //View.setBusyPos(11, 3);
         //write a function/cond to restrict user choose points that are not default node.
         this.setStartPos(6, 2);
-
     },
     
+    setDefaultBlocks: function (){
+        for (width = 0; width < 19; width++) {
+            for (height = 0;  height < 28; height++) {
+                if ((width % 3 !== 0) && (height % 4 !== 0))
+                    this.setWalkableAt(height, width, false);
+            }
+        }
+    },
 
+    setStartPosWithoutDeletePrev: function (gridX, gridY) {
+        View.setStartPosWithoutDeletePrev(gridX, gridY);
+    },
+
+    flushCurrentGreenNodes: function(store) {
+        View.flushCurrentGreenNodes(store.x_grid, store.y_grid);
+    },
+
+    setSelectedNode: function (gridX, gridY) {
+        View.setSelectedNode(gridX, gridY);
+    },
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
         View.setStartPos(gridX, gridY);
     },
+
     setEndPos: function(gridX, gridY) {
         this.endX = gridX;
         this.endY = gridY;

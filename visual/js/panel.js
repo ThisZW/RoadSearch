@@ -5,10 +5,10 @@ var Panel = {
     init: function() {
         var $algo = $('#algorithm_panel');
 
-        $('.panel').draggable();
-        $('.accordion').accordion({
-            collapsible: false,
-        });
+        //$('.panel').draggable();
+        //$('.accordion').accordion({
+          //  collapsible: false,
+        //});
         $('.option_label').click(function() {
             $(this).prev().click();
         });
@@ -35,8 +35,8 @@ var Panel = {
         switch (selected_header) {
 
         case 'astar_header':
-            allowDiagonal = typeof $('#astar_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+            allowDiagonal = false;//typeof $('#astar_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             biDirectional = typeof $('#astar_section ' +
                                      '.bi-directional:checked').val() !=='undefined';
             dontCrossCorners = typeof $('#astar_section ' +
