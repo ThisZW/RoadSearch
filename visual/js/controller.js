@@ -29,7 +29,7 @@ var Controller = StateMachine.create({
         },
         {
             name: 'resume',
-            from: 'paused', 
+            from: 'paused',
             to:   'searching'
         },
         {
@@ -86,14 +86,13 @@ var Controller = StateMachine.create({
             name: 'rest',
             from: ['draggingStart', 'draggingEnd', 'drawingWall', 'erasingWall'],
             to  : 'ready'
-        },      
-
+        },
     ],
 });
 
 $.extend(Controller, {
-    gridSize: [29, 19], // number of nodes horizontally and vertically
-    operationsPerSecond: 1,
+    gridSize: [64, 36], // number of nodes horizontally and vertically
+    operationsPerSecond: 300,
 
     /**
      * Asynchronous transition from `none` state to `ready` state.
@@ -109,8 +108,7 @@ $.extend(Controller, {
             numRows: numRows
         });
         View.generateGrid(function() {
-            //Controller.setDefaultStartEndPos();
-            Controller.setDefaultBlocks();
+            Controller.setDefaultStartEndPos();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
             Controller.ongeneratingroutes();
@@ -123,8 +121,6 @@ $.extend(Controller, {
         return StateMachine.ASYNC;
         // => ready
     },
-
-
     ondrawWall: function(event, from, to, gridX, gridY) {
         this.setWalkableAt(gridX, gridY, false);
         // => drawingWall
@@ -502,8 +498,8 @@ $.extend(Controller, {
         this.setEndPos(20, 0);
 
         //set default blocks
-        for (width = 0; width < 19; width++) {
-            for (height = 0;  height < 36; height++) {
+        for (width = 0; width < 18; width++) {
+            for (height = 0;  height < 32; height++) {
                 if ((width % 3 !== 0) && (height % 4 !== 0))
                     this.setWalkableAt(height, width, false);
             }
@@ -538,16 +534,14 @@ $.extend(Controller, {
         }
     },
 
-    setStartPosWithoutDeletePrev: function (gridX, gridY) {
-        View.setStartPosWithoutDeletePrev(gridX, gridY);
     },
+    
 
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
         View.setStartPos(gridX, gridY);
     },
-
     setEndPos: function(gridX, gridY) {
         this.endX = gridX;
         this.endY = gridY;
