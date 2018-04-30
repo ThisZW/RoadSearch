@@ -35,8 +35,8 @@ var Panel = {
         switch (selected_header) {
 
         case 'astar_header':
-            allowDiagonal = typeof $('#astar_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+            allowDiagonal = false;//typeof $('#astar_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             biDirectional = typeof $('#astar_section ' +
                                      '.bi-directional:checked').val() !=='undefined';
             dontCrossCorners = typeof $('#astar_section ' +
@@ -85,8 +85,8 @@ var Panel = {
             break;
 
         case 'bestfirst_header':
-            allowDiagonal = typeof $('#bestfirst_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+                allowDiagonal = false;//typeof $('#bestfirst_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             biDirectional = typeof $('#bestfirst_section ' +
                                      '.bi-directional:checked').val() !== 'undefined';
             dontCrossCorners = typeof $('#bestfirst_section ' +

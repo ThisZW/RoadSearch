@@ -37,6 +37,11 @@ var View = {
             fill: '#e5e5e5',
             'stroke-opacity': 0.2,
         },
+        //Gor: added busy road color node
+        busy: {
+            fill: '#ff9933',
+            'stroke-opacity': 0.2,
+        },
     },
     nodeColorizeEffect: {
         duration: 50,
@@ -141,6 +146,19 @@ var View = {
             .animate(this.nodeStyle.start, 1000).toFront();
     },
 
+    //Gor: implemented busy position
+    setBusyPos: function (gridX, gridY) {
+        var coord = this.toPageCoordinate(gridX, gridY);
+        var storeNode = this.paper.rect(
+            coord[0],
+            coord[1],
+            this.nodeSize,
+            this.nodeSize
+        ).attr(this.nodeStyle.normal)
+            .animate(this.nodeStyle.busy, 1000).toFront();
+    },
+
+
 
     setEndPos: function(gridX, gridY) {
         var coord = this.toPageCoordinate(gridX, gridY);
@@ -173,7 +191,14 @@ var View = {
         case 'closed':
             this.colorizeNode(this.rects[gridY][gridX], nodeStyle.closed.fill);
             this.setCoordDirty(gridX, gridY, true);
+        break;
+
+         //Gor: added case for busy road
+        case 'busy':
+            color = value ? nodeStyle.busy.fill : nodeStyle.blocked.fill;
+            this.setWalkableAt(gridX, gridY, value);
             break;
+
         case 'tested':
             color = (value === true) ? nodeStyle.tested.fill : nodeStyle.normal.fill;
 

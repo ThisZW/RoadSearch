@@ -29,7 +29,88 @@
   </head>
   <body>
 
- <script type="text/javascript">
+  <div class="main-page container">
+  <script type="text/javascript">
+        //by Zw, this can be the field that takes parameter from backend(address/axis)
+    var stores = [ //test data
+      {
+        "id": 8,
+        "x_grid": 18,
+        "y_grid": 1,
+        "stores": {
+          "id": 8,
+        },
+      },
+      {
+        "id": 6,
+        "x_grid": 21,
+        "y_grid": 12,
+        "stores": {
+          "id": 6,
+        },
+      },
+      {
+        "id": 2,
+        "x_grid": 8,
+        "y_grid": 3,
+        "stores": {
+          "id": 2,
+        },
+      },
+      {
+        "id": 3,
+        "x_grid": 27,
+        "y_grid": 4,
+        "stores": {
+          "id": 3,
+        },
+      },
+      {
+        "id": 7,
+        "x_grid": 27,
+        "y_grid": 13,
+        "stores": {
+          "id": 7,
+        },
+      },
+      {
+        "id": 5,
+        "x_grid": 13,
+        "y_grid": 19,
+        "stores": {
+          "id": 5,
+          "name": "teststore",
+        },
+      },
+      {
+        "id": 1,
+        "x_grid": 3,
+        "y_grid": 3,
+        "stores": {
+          "id": 1,
+          "name": "Full Moon",
+        },
+      },
+      {
+        "id": 4,
+        "x_grid": 2,
+        "y_grid": 14,
+        "created_at": null,
+        "updated_at": null,
+        "stores": {
+          "id": 4,
+          "name": "teststore",
+          "description": "",
+          "image": "",
+          "address_id": 4,
+          "created_at": null,
+          "updated_at": null
+        },
+        "distance": 16.55294535724685
+      }
+    ];
+    //{!! json_encode($data) !!};
+
    $(document).ready(function() {
     if (!Raphael.svg) {
         window.location = './notsupported.html';
@@ -44,44 +125,59 @@
     Panel.init();
     Controller.init();
 
-    //by Zw, this can be the field that takes parameter from backend(address/axis)
-    $.extend(Controller,{
-      x1 : 10, y1 : 11,
-      x2 : 8 , y2 : 16,
-      x3 : 9 , y3 : 10
-    });
 
     $.extend(Controller,{
       //overwrite
       mousedown: function (event) {
-          var coord = View.toGridCoordinate(event.pageX, event.pageY),
-              gridX = coord[0],
-              gridY = coord[1],
-              grid  = this.grid;
+        //set offset to the draw area first, in order to make the event of x,y work
+        var posX = $('#draw_area').offset().left;
+        var posY = $('#draw_area').offset().top;
+        var coord = View.toGridCoordinate(event.pageX-posX, event.pageY-posY),
+          gridX = coord[0],
+          gridY = coord[1],
+          grid  = this.grid;
 
-          if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
-              this.setEndPos(gridX, gridY);
-          }
+        if (this.can('eraseWall') && !grid.isWalkableAt(gridX, gridY)) {
+          this.setEndPos(gridX, gridY);
+          findNearestStores(gridX,gridY);
+        }
       },
     });
     //Controller.setStartPosWithoutDeletePrev(10,10);
 });
 
-   //思路: 用ajax在后端把三个最近地址送到前端 通过extend打进controller class 然后跑这个function把三个startPos画出来当做stores?
-    function confirmAction(){
-      Controller.setStartPosWithoutDeletePrev(Controller.x1,Controller.y1);
-      Controller.setStartPosWithoutDeletePrev(Controller.x2,Controller.y2);
-      Controller.setStartPosWithoutDeletePrev(Controller.x3,Controller.y3); 
+   //拉出所有store, 算路程，sort， 输出三个store , 输出的同时清除之前出现位置的其他store
+    function findNearestStores(x , y){
+        for(var i in stores){
+          stores[i].distance = Math.sqrt( Math.pow((stores[i].x_grid - x), 2) + Math.pow((stores[i].y_grid - y),2));
+        }
+        stores.sort(function(a,b){ 
+            var x = a.distance < b.distance? -1:1; 
+            return x; 
+        });
+        for(var i in stores){
+          if (i == 0)
+            Controller.setStartPos(stores[i].x_grid, stores[i].y_grid);
+          else if (i==3)
+            break;
+          else
+            Controller.setStartPosWithoutDeletePrev(stores[i].x_grid, stores[i].y_grid);
+        }
     }
+  
+    function clearStores(){
 
- </script>
+    }
+</script>
 
 
 
     <div id="draw_area">
       
     </div>
-    <button name="confirm" id="confirm" onclick="confirmAction()">Confirm your address</button>
+
+
+    <button name="confirm" class="btn-md" id="confirm" onclick="confirmAction()">Confirm your address</button>
     <div id="instructions_panel" class="panel">
       <header>
         <h2 class="header_title">Instructions</h2>
@@ -285,3 +381,5 @@
 
   </body>
 </html>
+
+

@@ -113,6 +113,7 @@ $.extend(Controller, {
             Controller.setDefaultBlocks();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
+            Controller.ongeneratingroutes();
         });
 
         this.$buttons = $('.control_button');
@@ -156,8 +157,8 @@ $.extend(Controller, {
         // that all the animations are done by the time we clear the colors.
         // The same reason applies for the `onreset` event handler.
         setTimeout(function() {
-            Controller.clearOperations();
-            Controller.clearFootprints();
+           // Controller.clearOperations();
+           // Controller.clearFootprints();
             Controller.start();
         }, View.nodeColorizeEffect.duration * 1.2);
         // => restarting
@@ -204,6 +205,20 @@ $.extend(Controller, {
      * The following functions are called on entering states.
      */
 
+    ongeneratingroutes: function () {
+        //Gor: for first and second search:
+        Controller.onsearch();
+        Controller.onfinish();
+        //select 2nd and 3rd algorithm: TODO - implement
+
+        //third search: search twice and clear path.
+        Controller.onsearch();
+        Controller.onfinish();
+        Controller.onfinish();
+        Controller.onclear();
+    },
+
+
     onready: function() {
         console.log('=> ready');
         this.setButtonStates({
@@ -226,7 +241,7 @@ $.extend(Controller, {
     onstarting: function(event, from, to) {
         console.log('=> starting');
         // Clears any existing search progress
-        this.clearFootprints();
+        //this.clearFootprints();
         this.setButtonStates({
             id: 2,
             enabled: true,
@@ -234,6 +249,7 @@ $.extend(Controller, {
         this.search();
         // => searching
     },
+
     onsearching: function() {
         console.log('=> searching');
         this.setButtonStates({
@@ -492,6 +508,24 @@ $.extend(Controller, {
                     this.setWalkableAt(height, width, false);
             }
         }
+
+
+        //Gor: random generate busy conditions
+        for (var value = 0; value < 70; value++) {
+            width = Math.floor((Math.random() * 32) + 0);
+            height = Math.floor((Math.random() * 18) + 0);
+            if ((height % 3 == 0) && (width % 4 == 0))
+                View.setBusyPos(width, height);
+        }
+
+
+        View.setStartPosWithoutDeletePrev(1, 10);
+        View.setStartPosWithoutDeletePrev(6, 2);
+        View.setStartPosWithoutDeletePrev(11, 7);
+        //View.setBusyPos(9, 0);
+        //View.setBusyPos(11, 3);
+        //write a function/cond to restrict user choose points that are not default node.
+        this.setStartPos(6, 2);
 
     },
     
