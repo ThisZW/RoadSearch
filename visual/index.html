@@ -26,6 +26,7 @@
     <script type="text/javascript" src="./js/controller.js"></script>
     <script type="text/javascript" src="./js/panel.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   </head>
   <body>
     <div id="draw_area"></div>
@@ -51,20 +52,24 @@
           });
       </script>
 
-      <script type="text/javascript" src="html2canvas.js"></script>
+      
       <script>
           function take_screenshot() {
-              html2canvas(document.body, {
-                  onrendered: function (canvas) {
-                      var img = canvas.toDataURL()
-                      //specify name and location
-                      //implement screenshot
-                      //http://talkerscode.com/webtricks/take-screenshot-of-a-webpage-using-html5-and-javascript.php
-                      $.post("save_screenshot.php", { data: img }, function (file) {
-                          window.location.href = "save_screenshot.php?file=" + file
-                      });
-                  }
-              });
+              html2canvas($('#mypics'), {  
+                    onrendered : function(canvas) {  
+                        var myImage = canvas.toDataURL("image/jpeg");  
+                        //并将图片上传到服务器用作图片分享  
+                        $.ajax({  
+                            type : "POST",  
+                            url : '${ctx}/qsupload',  
+                            data : {data:myImage},  
+                            timeout : 60000,  
+                            success : function(data){  
+                                $('#myShowImage').attr('src', 'public/temp/'+data+'.jpg'); //服务器上保存图片路径，data是返回的文件名。  
+                            }  
+                        });  
+                    }  
+                });  
           }
       </script>
       
