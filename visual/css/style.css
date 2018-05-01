@@ -141,3 +141,7 @@ footer {
 .spinner {
     width: 2em;
 }
+
+.panel {
+    display:none;
+}
