@@ -116,7 +116,19 @@
     if (!Raphael.svg) {
         window.location = './notsupported.html';
     }
-
+      $('#confirm_address').click(function(event) {
+        $.ajax({
+            type: "POST",
+            url: "/select-store",
+            data:{
+              Coord: storeSelection,
+            },
+            success:function(data){
+              console.log(data.msg);
+              $("#msg").html(data.msg);
+            },
+        });
+      });
     $.extend(Controller,{
       //overwrite
       mousedown: function (event) {
@@ -213,9 +225,7 @@
         }
     }
   
-    function clearStores(){
 
-    }
 </script>
 
 
@@ -225,7 +235,7 @@
     </div>
 
 
-    <button name="confirm" class="btn-md" id="confirm" onclick="confirmAction()">Confirm your address</button>
+    <button name="confirm" class="btn-md" id="confirm" onclick="">Confirm your address</button>
     <div id="instructions_panel" class="panel">
       <header>
         <h2 class="header_title">Instructions</h2>
