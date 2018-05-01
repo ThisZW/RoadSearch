@@ -91,13 +91,13 @@ var Controller = StateMachine.create({
 });
 
 $.extend(Controller, {
-    gridSize: [64, 36], // number of nodes horizontally and vertically
+    gridSize: [33, 19], // number of nodes horizontally and vertically
     operationsPerSecond: 300,
 
     /**
      * Asynchronous transition from `none` state to `ready` state.
      */
-    onleavenone: function() {
+    onleavenone: function(mode) {
         var numCols = this.gridSize[0],
             numRows = this.gridSize[1];
 
@@ -107,6 +107,7 @@ $.extend(Controller, {
             numCols: numCols,
             numRows: numRows
         });
+
         View.generateGrid(function() {
             Controller.setDefaultStartEndPos();
             Controller.bindEvents();
@@ -536,6 +537,17 @@ $.extend(Controller, {
 
     },
     
+    flushCurrentGreenNodes: function(store) {
+        View.flushCurrentGreenNodes(store.x_grid, store.y_grid);
+    },
+
+    setSelectedNode: function (gridX, gridY) {
+        View.setSelectedNode(gridX, gridY);
+    },
+
+    setStartPosWithoutDeletePrev: function (gridX, gridY) {
+        View.setStartPosWithoutDeletePrev(gridX, gridY);
+    },
 
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;

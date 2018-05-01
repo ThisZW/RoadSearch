@@ -34,17 +34,7 @@
           //var = ""
           $(document).ready(function () {
               
-              function takeScreenshot(){
-                html2canvas($("#draw_area"), {
-                  onrendered: function(canvas) {
-                      theCanvas = canvas;
-                      document.body.appendChild(canvas);
-                      // Convert and download as image 
-                      Canvas2Image.saveAsJPEG(canvas); 
-                      $("#img-out").append(canvas);
-                  }
-                  });
-              }
+
               if (!Raphael.svg) {
                   window.location = './notsupported.html';
               }
@@ -57,7 +47,15 @@
               // initialize visualization
               Panel.init();
               Controller.init();
-              takeScreenshot();
+              html2canvas($("#draw_area"), {
+                  onrendered: function(canvas) {
+                      theCanvas = canvas;
+                      document.body.appendChild(canvas);
+                      // Convert and download as image 
+                      Canvas2Image.saveAsJPEG(canvas); 
+                      $("#img-out").append(canvas);
+                  }
+                  });
           });
       </script>
     <div id="draw_area"></div>
