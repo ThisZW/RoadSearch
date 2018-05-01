@@ -29,14 +29,22 @@
     <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   </head>
   <body>
-    <div id="draw_area"></div>
-
-
-      <script type="text/javascript">
+    <script type="text/javascript">
           //store all store's coordinate
           //var = ""
           $(document).ready(function () {
               
+              function takeScreenshot(){
+                html2canvas($("#draw_area"), {
+                  onrendered: function(canvas) {
+                      theCanvas = canvas;
+                      document.body.appendChild(canvas);
+                      // Convert and download as image 
+                      Canvas2Image.saveAsJPEG(canvas); 
+                      $("#img-out").append(canvas);
+                  }
+                  });
+              }
               if (!Raphael.svg) {
                   window.location = './notsupported.html';
               }
@@ -49,29 +57,13 @@
               // initialize visualization
               Panel.init();
               Controller.init();
+              takeScreenshot();
           });
       </script>
+    <div id="draw_area"></div>
+<div id="img-out"></div>
 
-      
-      <script>
-          function take_screenshot() {
-              html2canvas($('#mypics'), {  
-                    onrendered : function(canvas) {  
-                        var myImage = canvas.toDataURL("image/jpeg");  
-                        //并将图片上传到服务器用作图片分享  
-                        $.ajax({  
-                            type : "POST",  
-                            url : '${ctx}/qsupload',  
-                            data : {data:myImage},  
-                            timeout : 60000,  
-                            success : function(data){  
-                                $('#myShowImage').attr('src', 'public/temp/'+data+'.jpg'); //服务器上保存图片路径，data是返回的文件名。  
-                            }  
-                        });  
-                    }  
-                });  
-          }
-      </script>
+
       
     <div id="instructions_panel" class="panel">
     </div>

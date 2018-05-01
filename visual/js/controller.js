@@ -29,7 +29,7 @@ var Controller = StateMachine.create({
         },
         {
             name: 'resume',
-            from: 'paused', 
+            from: 'paused',
             to:   'searching'
         },
         {
@@ -86,14 +86,13 @@ var Controller = StateMachine.create({
             name: 'rest',
             from: ['draggingStart', 'draggingEnd', 'drawingWall', 'erasingWall'],
             to  : 'ready'
-        },      
-
+        },
     ],
 });
 
 $.extend(Controller, {
-    gridSize: [29, 19], // number of nodes horizontally and vertically
-    operationsPerSecond: 1,
+    gridSize: [64, 36], // number of nodes horizontally and vertically
+    operationsPerSecond: 300,
 
     /**
      * Asynchronous transition from `none` state to `ready` state.
@@ -109,8 +108,7 @@ $.extend(Controller, {
             numRows: numRows
         });
         View.generateGrid(function() {
-            //Controller.setDefaultStartEndPos();
-            Controller.setDefaultBlocks();
+            Controller.setDefaultStartEndPos();
             Controller.bindEvents();
             Controller.transition(); // transit to the next state (ready)
             Controller.ongeneratingroutes();
@@ -123,8 +121,6 @@ $.extend(Controller, {
         return StateMachine.ASYNC;
         // => ready
     },
-
-
     ondrawWall: function(event, from, to, gridX, gridY) {
         this.setWalkableAt(gridX, gridY, false);
         // => drawingWall
@@ -507,14 +503,12 @@ $.extend(Controller, {
         this.setEndPos(20, 0);
 
         //set default blocks
-        for (width = 0; width < 19; width++) {
-            for (height = 0;  height < 36; height++) {
-
-                if ((width % 3 !== 0) && (height % 4 !== 0))
-                    this.setWalkableAt(height, width, false);
+        for (height = 0; height < 18; height++) {
+            for (width = 0;  width < 32; width++) {
+                if ((height % 3 !== 0) && (width % 4 !== 0))
+                    this.setWalkableAt(width, height, false);
             }
         }
-
 
         //Gor: random generate busy conditions
         for (var value = 0; value < 30; value++) {
@@ -539,35 +533,15 @@ $.extend(Controller, {
         //View.setBusyPos(11, 3);
         //write a function/cond to restrict user choose points that are not default node.
         this.setStartPos(1, 10);
+
     },
     
-    setDefaultBlocks: function (){
-        for (width = 0; width < 19; width++) {
-            for (height = 0;  height < 28; height++) {
-                if ((width % 3 !== 0) && (height % 4 !== 0))
-                    this.setWalkableAt(height, width, false);
-            }
-        }
-    },
 
-    setStartPosWithoutDeletePrev: function (gridX, gridY) {
-        View.setStartPosWithoutDeletePrev(gridX, gridY);
-    },
-
-
-    flushCurrentGreenNodes: function(store) {
-        View.flushCurrentGreenNodes(store.x_grid, store.y_grid);
-    },
-
-    setSelectedNode: function (gridX, gridY) {
-        View.setSelectedNode(gridX, gridY);
-    },
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;
         this.startY = gridY;
         View.setStartPos(gridX, gridY);
     },
-
     setEndPos: function(gridX, gridY) {
         this.endX = gridX;
         this.endY = gridY;
