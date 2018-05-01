@@ -30,16 +30,45 @@
   <body>
     <div id="draw_area"></div>
 
+
+      <script type="text/javascript">
+          //store all store's coordinate
+          //var = ""
+          $(document).ready(function () {
+              
+              if (!Raphael.svg) {
+                  window.location = './notsupported.html';
+              }
+
+              // suppress select events
+              $(window).bind('selectstart', function (event) {
+                  event.preventDefault();
+              });
+
+              // initialize visualization
+              Panel.init();
+              Controller.init();
+          });
+      </script>
+
+      <script type="text/javascript" src="html2canvas.js"></script>
+      <script>
+          function take_screenshot() {
+              html2canvas(document.body, {
+                  onrendered: function (canvas) {
+                      var img = canvas.toDataURL()
+                      //specify name and location
+                      //implement screenshot
+                      //http://talkerscode.com/webtricks/take-screenshot-of-a-webpage-using-html5-and-javascript.php
+                      $.post("save_screenshot.php", { data: img }, function (file) {
+                          window.location.href = "save_screenshot.php?file=" + file
+                      });
+                  }
+              });
+          }
+      </script>
+      
     <div id="instructions_panel" class="panel">
-      <header>
-        <h2 class="header_title">Instructions</h2>
-        <span id="hide_instructions">hide</span>
-      </header>
-      Click within the <span class="white">white</span> grid and drag your mouse to draw obstacles. <br>
-      Drag the <span class="green">green</span> node to set the start position. <br>
-      Drag the <span class="red">red</span> node to set the end position. <br>
-      Choose an algorithm from the right-hand panel. <br>
-      Click Start Search in the lower-right corner to start the animation.
     </div>
 
     <div id="algorithm_panel" class="panel right_panel">

@@ -108,8 +108,8 @@ var Panel = {
             break;
 
         case 'dijkstra_header':
-            allowDiagonal = typeof $('#dijkstra_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+            allowDiagonal = false;//typeof $('#dijkstra_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             biDirectional = typeof $('#dijkstra_section ' +
                                      '.bi-directional:checked').val() !=='undefined';
             dontCrossCorners = typeof $('#dijkstra_section ' +
@@ -150,8 +150,8 @@ var Panel = {
             });
             break;
         case 'ida_header':
-            allowDiagonal = typeof $('#ida_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
+            allowDiagonal = false;//typeof $('#ida_section ' +
+                                     //'.allow_diagonal:checked').val() !== 'undefined';
             dontCrossCorners = typeof $('#ida_section ' +
                                      '.dont_cross_corners:checked').val() !=='undefined';
             trackRecursion = typeof $('#ida_section ' +

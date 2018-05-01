@@ -206,7 +206,12 @@ $.extend(Controller, {
         Controller.onsearch();
         Controller.onfinish();
         //select 2nd and 3rd algorithm: TODO - implement
-
+        $('#astar_header').attr('aria-selected', false);
+        $('#ida_header').attr('aria-selected', true);
+        Controller.onsearch();
+        Controller.onfinish();
+        $('#ida_header').attr('aria-selected', false);
+        $('#dijkstra_header').attr('aria-selected', true);
         //third search: search twice and clear path.
         Controller.onsearch();
         Controller.onfinish();
@@ -506,11 +511,18 @@ $.extend(Controller, {
         }
 
         //Gor: random generate busy conditions
-        for (var value = 0; value < 70; value++) {
+        for (var value = 0; value < 30; value++) {
             width = Math.floor((Math.random() * 32) + 0);
             height = Math.floor((Math.random() * 18) + 0);
-            if ((height % 3 == 0) && (width % 4 == 0))
+            if ((height % 3 == 0) || (width % 4 == 0))
                 View.setBusyPos(width, height);
+        }
+
+        for (var value = 0; value < 10; value++) {
+            width = Math.floor((Math.random() * 32) + 0);
+            height = Math.floor((Math.random() * 18) + 0);
+            if ((height % 3 == 0) || (width % 4 == 0))
+                this.setWalkableAt(width, height, false);
         }
 
 
@@ -520,7 +532,7 @@ $.extend(Controller, {
         //View.setBusyPos(9, 0);
         //View.setBusyPos(11, 3);
         //write a function/cond to restrict user choose points that are not default node.
-        this.setStartPos(6, 2);
+        this.setStartPos(1, 10);
 
     },
     
