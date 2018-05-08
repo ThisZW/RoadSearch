@@ -501,7 +501,7 @@ $.extend(Controller, {
         centerY = Math.floor(height / 2 / nodeSize);
 
         //this.setStartPos(0, 20);
-        this.setEndPos(20, 0);
+        
 
         //set default blocks
         for (height = 0; height < 18; height++) {
@@ -510,6 +510,10 @@ $.extend(Controller, {
                     this.setWalkableAt(width, height, false);
             }
         }
+        //Gor: endblocks suppose to be within the blocknode area, problem fixed.
+        this.setWalkableAt(21, 1, true);
+        this.setEndPos(21, 1);
+
 
         //Gor: random generate busy conditions
         for (var value = 0; value < 30; value++) {
